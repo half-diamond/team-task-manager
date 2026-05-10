@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Team Task Manager</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="app.js"></script>
+  </head>
+
+  <body>
+    <main id="authView" class="auth-layout">
+      <section class="auth-intro" aria-label="Workspace preview">
+        <div class="auth-brand">
+          <span class="brand-mark">TT</span>
+          <strong>Team Task Manager</strong>
+        </div>
+        <div>
+          <p class="title">Team planning</p>
+          <h1>Manage projects from one focused workspace.</h1>
+          <p class="muted">Create projects, invite members, assign tasks, and track status without losing the thread.</p>
+        </div>
+        <div class="preview-board" aria-hidden="true">
+          <div class="preview-column">
+            <span class="dot dot-blue"></span>
+            <strong>To Do</strong>
+            <div class="preview-card"></div>
+          </div>
+          <div class="preview-column">
+            <span class="dot dot-amber"></span>
+            <strong>In Progress</strong>
+            <div class="preview-card tall"></div>
+          </div>
+          <div class="preview-column">
+            <span class="dot dot-green"></span>
+            <strong>Completed</strong>
+            <div class="preview-card"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="loginSection" class="auth-card">
+        <p class="title">Welcome back</p>
+        <h2>Log in to your workspace</h2>
+        <form id="loginForm" class="form-grid">
+          <label>
+            Email
+            <input type="email" name="email" placeholder="you@example.com" autocomplete="email" required />
+          </label>
+          <label>
+            Password
+            <input type="password" name="password" placeholder="Password" autocomplete="current-password" required />
+          </label>
+          <button class="btn" type="submit">Login</button>
+        </form>
+        <p class="auth-switch">
+          Don't have an account?
+          <button id="showSignupBtn" class="link-button" type="button">Sign up</button>
+        </p>
+      </section>
+
+      <section id="signupSection" class="auth-card hidden">
+        <p class="title">Get started</p>
+        <h2>Create your account</h2>
+        <form id="signupForm" class="form-grid">
+          <label>
+            Name
+            <input type="text" name="name" placeholder="Your name" autocomplete="name" required />
+          </label>
+          <label>
+            Email
+            <input type="email" name="email" placeholder="you@example.com" autocomplete="email" required />
+          </label>
+          <label>
+            Password
+            <input
+              type="password"
+              name="password"
+              placeholder="At least 6 characters"
+              autocomplete="new-password"
+              minlength="6"
+              required
+            />
+          </label>
+          <button class="btn" type="submit">Create account</button>
+        </form>
+        <p class="auth-switch">
+          Already have an account?
+          <button id="showLoginBtn" class="link-button" type="button">Log in</button>
+        </p>
+      </section>
+    </main>
+
+    <main id="appView" class="app-shell hidden">
+      <aside class="app-sidebar">
+        <div class="sidebar-brand">
+          <span class="brand-mark">TT</span>
+          <span>TaskFlow</span>
+        </div>
+
+        <nav class="nav-list" aria-label="Task filters">
+          <button class="nav-item active" type="button" data-task-filter="All">Board</button>
+          <button class="nav-item" type="button" data-task-filter="To Do">To Do</button>
+          <button class="nav-item" type="button" data-task-filter="In Progress">In Progress</button>
+          <button class="nav-item" type="button" data-task-filter="Done">Completed</button>
+          <button class="nav-item" type="button" data-scroll-target="membersCard">Team</button>
+        </nav>
+
+        <section class="sidebar-section">
+          <div class="sidebar-section-head">
+            <h2>Projects</h2>
+            <button id="refreshProjectsBtn" class="icon-btn" type="button">Refresh</button>
+          </div>
+          <div id="projectsList" class="project-list"></div>
+        </section>
+
+        <section class="project-create">
+          <h3>Create Project</h3>
+          <form id="createProjectForm" class="form-grid compact">
+            <label>
+              Project name
+              <input type="text" name="name" placeholder="Website launch" required />
+            </label>
+            <label>
+              Description
+              <textarea name="description" rows="3" placeholder="Optional"></textarea>
+            </label>
+            <button class="btn" type="submit">Create project</button>
+          </form>
+        </section>
+      </aside>
+
+      <section class="workspace">
+        <header class="workspace-topbar">
+          <label class="search-box">
+            <span>Search</span>
+            <input id="taskSearchInput" type="search" placeholder="Search tasks, members, projects..." />
+          </label>
+          <div class="topbar-actions">
+            <span id="userChip" class="chip hidden"></span>
+            <button id="logoutBtn" class="btn btn-ghost hidden" type="button">Logout</button>
+          </div>
+        </header>
+
+        <div id="emptyState" class="empty-state">
+          <div>
+            <h2>Select or create a project</h2>
+            <p>Choose a project from the sidebar to open its board.</p>
+          </div>
+        </div>
+
+        <div id="projectPanel" class="project-panel hidden">
+          <section class="project-summary">
+            <div>
+              <h1 id="projectTitle">Project</h1>
+              <p id="projectDescription" class="muted"></p>
+            </div>
+            <div class="project-actions">
+              <div class="pill-row">
+                <span id="rolePill" class="chip"></span>
+                <span id="memberCountPill" class="chip"></span>
+              </div>
+              <button id="openCreateTaskBtn" class="btn" type="button">+ Create Task</button>
+            </div>
+          </section>
+
+          <section class="stats-grid" id="statsGrid"></section>
+
+          <section id="createTaskCard" class="composer-panel hidden">
+            <div class="section-head">
+              <h3>New task</h3>
+              <button id="closeCreateTaskBtn" class="btn btn-ghost btn-sm" type="button">Close</button>
+            </div>
+            <form id="createTaskForm" class="task-form hidden">
+              <label>
+                Title
+                <input type="text" name="title" placeholder="Task title" required />
+              </label>
+              <label>
+                Due date
+                <input type="date" name="dueDate" />
+              </label>
+              <label>
+                Priority
+                <select name="priority">
+                  <option>Low</option>
+                  <option selected>Medium</option>
+                  <option>High</option>
+                </select>
+              </label>
+              <label>
+                Assignee
+                <select name="assignedTo">
+                  <option value="">Assign later</option>
+                </select>
+              </label>
+              <label class="field-wide">
+                Description
+                <textarea name="description" rows="3" placeholder="Task description"></textarea>
+              </label>
+              <button class="btn" type="submit">Create task</button>
+            </form>
+          </section>
+
+          <section class="board-shell">
+            <div class="board-head">
+              <div>
+                <h2>Tasks</h2>
+                <p id="boardSubtitle" class="muted">Board view</p>
+              </div>
+              <div class="board-actions">
+                <span class="view-pill">Board View</span>
+                <button id="refreshTasksBtn" class="btn btn-ghost btn-sm" type="button">Refresh</button>
+              </div>
+            </div>
+            <div id="tasksBoard" class="kanban-board"></div>
+          </section>
+
+          <section class="details-grid">
+            <section id="tasksPerUserCard" class="detail-panel">
+              <div class="section-head">
+                <h3>Tasks per user</h3>
+                <span id="dashboardScope" class="muted"></span>
+              </div>
+              <div id="tasksPerUserList" class="workload-list"></div>
+            </section>
+
+            <section id="membersCard" class="detail-panel">
+              <div class="section-head">
+                <h3>Team</h3>
+              </div>
+              <div id="membersList" class="member-list"></div>
+              <form id="addMemberForm" class="member-form hidden">
+                <input type="email" name="email" placeholder="Member email" required />
+                <select name="role">
+                  <option value="Member">Member</option>
+                  <option value="Admin">Admin</option>
+                </select>
+                <button class="btn" type="submit">Add member</button>
+              </form>
+            </section>
+          </section>
+        </div>
+      </section>
+
+      <div id="toast" class="toast hidden"></div>
+    </main>
+  </body>
+</html>
