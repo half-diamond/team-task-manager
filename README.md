@@ -21,7 +21,7 @@ A full-stack team task manager built with **Node.js, Express, MongoDB, HTML, CSS
    npm install
    ```
 2. Create environment files:
-   - `backend/.env` from `backend/.env.example`
+   - `backend/.env` 
 3. Add your MongoDB connection string and JWT secret.
 4. Start the app:
    ```bash
