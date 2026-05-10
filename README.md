@@ -1,6 +1,6 @@
 # Team Task Manager
 
-A full-stack team task manager built with **Node.js, Express, MongoDB, HTML, CSS, and vanilla JavaScript**.
+A full-stack team task manager built with **Node.js, Express, MongoDB, HTML, CSS, and JavaScript**.
 
 ## Features
 - Signup and login with JWT auth
