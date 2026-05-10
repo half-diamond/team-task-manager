@@ -64,6 +64,3 @@ CLIENT_URL=http://localhost:5000
 - `PATCH /api/tasks/:taskId/assign`
 - `DELETE /api/tasks/:taskId`
 - `GET /api/dashboard/project/:projectId`
-
-## Notes
-The frontend is served directly from the Express server, so there is no React build step.
