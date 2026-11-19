@@ -27,7 +27,7 @@ A full-stack team task manager built with **Node.js, Express, MongoDB, HTML, CSS
    ```bash
    npm start
    ```
-5. Open the app in your browser using the Railway URL or local server URL.
+5. Open the app in your browser using local server URL.
 
 ## Environment Variables
 ### backend/.env
@@ -39,15 +39,6 @@ NODE_ENV=development
 CLIENT_URL=http://localhost:5000
 ```
 
-## Deployment on Railway
-1. Push the repository to GitHub.
-2. Create a new Railway project from the repo.
-3. Add the environment variables above in Railway.
-4. Set the start command to:
-   ```bash
-   npm start
-   ```
-5. Deploy the service and open the public Railway URL.
 
 ## API Endpoints
 - `POST /api/auth/signup`
